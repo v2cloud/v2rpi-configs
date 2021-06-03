@@ -1,24 +1,13 @@
 #!/bin/bash
 
-# while getopts u:p: flag
-# do
-#     case "${flag}" in
-#         u) username=${OPTARG};;
-#         p) passwd=${OPTARG};;
-#     esac
-# done
-# echo "Username: $username";
-# echo "Pass: $passwd";
-
 cd /tmp && \
 rm -rf /tmp/v2rpi-configs ; \
-git clone "https://github.com/v2cloud/v2rpi-configs" \
-#rm -rf $dest ; \
-#mv /tmp/v2rpi/release-image/configs/root $dest 
+git clone "https://github.com/v2cloud/v2rpi-configs"
 
-if [[ -d /tmp/v2rpi ]]
-then echo "/tmp/v2rpi exist";
-else echo "/tmp/v2rpi does not exist"; exit 1
+if [[ -d /tmp/v2rpi-configs ]]; then
+  echo "v2rpi-configs downloaded";
+else 
+  echo "/tmp/v2rpi-configs does not exist. Quit!"; exit 1
 fi
 
 rootPath="/tmp/v2rpi-configs/root/"
