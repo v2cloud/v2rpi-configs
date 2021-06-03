@@ -35,10 +35,10 @@ for srcFile in $(find $rootPath -print); do
       #diff  $srcFile $targetFile 
       if [[ "$targetFile" == *".sh" ]]; then
         echo "    Create/Overwrite bash file $targetFile"
-        sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetPath" && sudo chmod 777 "$targetFile"
+        sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetFile" && sudo chmod 777 "$targetFile"
       else
         echo "    Create/Overwrite file $targetFile"
-        sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetPath"
+        sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetFile"
       fi
     fi
     echo
