@@ -1,16 +1,18 @@
 #!/bin/bash
 
-cd /tmp && \
-rm -rf /tmp/v2rpi-configs ; \
-git clone "https://github.com/v2cloud/v2rpi-configs"
+CONFIGS_DIR="/tmp/v2rpi-configs-main"
 
-if [[ -d /tmp/v2rpi-configs ]]; then
-  echo "v2rpi-configs downloaded";
+cd /tmp && \
+rm -rf "$CONFIGS_DIR" ; \
+wget -O - https://github.com/v2cloud/v2rpi-configs/archive/refs/heads/main.tar.gz | tar xz
+
+if [[ -d "$CONFIGS_DIR" ]]; then
+  echo "$CONFIGS_DIR downloaded";
 else 
-  echo "/tmp/v2rpi-configs does not exist. Quit!"; exit 1
+  echo "$CONFIGS_DIR does not exist. Quit!"; exit 1
 fi
 
-rootPath="/tmp/v2rpi-configs/root/"
+rootPath="$CONFIGS_DIR/root/"
 rootPathLength=`echo $rootPath | wc -c`
 
 for srcFile in $(find $rootPath -print); do
