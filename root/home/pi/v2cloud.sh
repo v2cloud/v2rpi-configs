@@ -57,11 +57,11 @@ appName=$(ls /home/pi/ | grep '^V2-Cloud.*\.AppImage$')
 newAppName=$(ls /home/pi/.cache/v2client-electron-updater/pending/ | grep '^V2-Cloud.*\.AppImage$')
 
 if [[ -z "$newAppName" ]]; then
-  cd /home/pi && ./$appName --no-security
+  cd /home/pi && ./$appName --no-security &
 else
   mv /home/pi/.cache/v2client-electron-updater/pending/$newAppName /home/pi/$newAppName
   rm /home/pi/$appName
-  cd /home/pi && ./$newAppName --no-security
+  cd /home/pi && ./$newAppName --no-security &
 fi
 
 # close unused apps
