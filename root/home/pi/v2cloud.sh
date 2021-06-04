@@ -66,3 +66,9 @@ fi
 
 # close unused apps
 killall light-locker
+
+# wait for internet connection
+check_internet.sh
+
+# update configs
+curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/main/update_configs.sh | sudo bash
