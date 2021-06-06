@@ -1,5 +1,27 @@
 #!/bin/bash
 
+# install required pkgs
+installed() {
+    return $(dpkg-query -W -f '${Status}\n' "${1}" 2>&1|awk '/ok installed/{print 0;exit}{print 1}')
+}
+
+pkgs=(libevent-pthreads-2.1-6 libjpeg8 sshpass feh wmctrl simple-scan printer-driver-all)
+missing_pkgs=""
+
+for pkg in ${pkgs[@]}; do
+  if ! $(installed $pkg) ; then
+    missing_pkgs+=" $pkg"
+  fi
+done
+
+if [ ! -z "$missing_pkgs" ]; then
+  echo "Install $missing_pkgs" 
+  sudo apt install -y $missing_pkgs
+fi
+### 
+
+# update configs
+SECONDS=0
 CONFIGS_DIR="/tmp/v2rpi-configs-main"
 
 cd /tmp && \
@@ -47,3 +69,4 @@ for srcFile in $(find $rootPath -print); do
   fi
 done;
 
+echo "update configs in $SECONDS seconds"
