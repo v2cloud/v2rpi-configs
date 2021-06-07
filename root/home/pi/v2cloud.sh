@@ -71,4 +71,5 @@ killall light-locker
 check_internet.sh
 
 # update configs
-curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/main/update_configs.sh | sudo bash
+curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/main/update_configs.sh | sudo bash &> /tmp/update_logs
+
