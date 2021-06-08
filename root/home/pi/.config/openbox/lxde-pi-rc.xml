@@ -260,7 +260,7 @@
     </keybind>
     <keybind key="C-A-T">
       <action name="Execute">
-         <command>x-terminal-emulator</command>
+         <command>sh -c "x-terminal-emulator; sleep 0.1; wmctrl -l | tail -1 | grep -Eo '(0x[^ ]*)' | xargs wmctrl -i -a "</command>
       </action>
     </keybind>
     <keybind key="C-A-V">
