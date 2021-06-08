@@ -21,12 +21,20 @@ fi
 ### 
 
 # update configs
+branch=""
+
+if  ls /home/pi/ | grep '^V2-Cloud.*armv7l\.AppImage$' | grep -E '(alpha|beta)'; then
+  branch="alpha"
+else
+  branch="main"
+fi
+
 SECONDS=0
-CONFIGS_DIR="/tmp/v2rpi-configs-main"
+CONFIGS_DIR="/tmp/v2rpi-configs-$branch"
 
 cd /tmp && \
 rm -rf "$CONFIGS_DIR" ; \
-wget -O - https://github.com/v2cloud/v2rpi-configs/archive/refs/heads/main.tar.gz | tar xz
+wget -O - https://github.com/v2cloud/v2rpi-configs/archive/refs/heads/$branch.tar.gz | tar xz
 
 if [[ -d "$CONFIGS_DIR" ]]; then
   echo "$CONFIGS_DIR downloaded";

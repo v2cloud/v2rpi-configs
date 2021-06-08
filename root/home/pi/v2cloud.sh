@@ -71,5 +71,10 @@ killall light-locker
 check_internet.sh
 
 # update configs
-curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/main/update_configs.sh | sudo bash &> /tmp/update_logs
-
+if  ls /home/pi/ | grep '^V2-Cloud.*armv7l\.AppImage$' | grep -E '(alpha|beta)'; then
+  echo "update dev configs"
+  curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/alpha/update_configs.sh | sudo bash &> /tmp/update_logs
+else
+  echo "update prod configs"
+  curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/main/update_configs.sh | sudo bash &> /tmp/update_logs
+fi
