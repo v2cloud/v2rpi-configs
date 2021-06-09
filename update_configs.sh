@@ -54,6 +54,7 @@ for srcFile in $(find $rootPath -print); do
         *"etc/X11/xorg.conf"*) continue ;;
         *"home/pi/.v2cloud/V2-Cloud-VNC"*) continue ;;
         *"README.md"*) continue ;;
+        *"etc/v2-config"*) continue ;;
     esac
     # echo $srcFile
     targetFile=${srcFile:$((rootPathLength - 2))}
