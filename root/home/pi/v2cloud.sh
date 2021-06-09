@@ -70,11 +70,14 @@ killall light-locker
 # wait for internet connection
 check_internet.sh
 
+# get branch or set default to 'main'
+branch=$(sudo cat /etc/v2-config | grep BRANCH | sed 's/BRANCH=//')
+
+case $branch 
+  in "dev") ;;
+  *) branch="main" ;;
+esac
+
 # update configs
-if  ls /home/pi/ | grep '^V2-Cloud.*armv7l\.AppImage$' | grep -E '(alpha|beta)'; then
-  echo "update dev configs"
-  curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/alpha/update_configs.sh | sudo bash &> /tmp/update_logs
-else
-  echo "update prod configs"
-  curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/main/update_configs.sh | sudo bash &> /tmp/update_logs
-fi
+echo "Updating configs in $branch branch"
+curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/$branch/update_configs.sh | sudo bash &> /tmp/update_logs
