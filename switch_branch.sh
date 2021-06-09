@@ -15,7 +15,7 @@ case $branch in
     "stable") downloadURL="https://github.com/v2cloud/Denver-Releases/releases" ;;
 
     *)
-        zenity --error --title="Switch branch failed"  --text="No branch is selected!" --width=200 --timeout=3 &
+        zenity --error --title="Switch branch failed"  --text="No branch is selected!" --width=300 --timeout=3 &
         exit 1
     ;;
 esac

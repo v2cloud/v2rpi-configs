@@ -288,6 +288,11 @@
          <command>v2reset.sh</command>
       </action>
     </keybind>
+    <keybind key="C-A-0">
+      <action name="Execute">
+         <command>switch_branch.sh</command>
+      </action>
+    </keybind>
     <!--keybindings for LXPanel -->
     <keybind key="Super_L">
       <action name="Execute">
