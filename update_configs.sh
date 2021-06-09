@@ -20,15 +20,27 @@ if [ ! -z "$missing_pkgs" ]; then
 fi
 ### 
 
-# update configs
-branch=""
-
-if  ls /home/pi/ | grep '^V2-Cloud.*armv7l\.AppImage$' | grep -E '(alpha|beta)'; then
-  branch="alpha"
-else
-  branch="main"
+# get rpi-config branch
+DEFAULT_CONFIG=$'BRANCH=main\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
+if [ ! -f "/etc/v2-config" ]; then 
+  sudo echo "$DEFAULT_CONFIG" > /etc/v2-config
 fi
 
+branch=$(sudo cat /etc/v2-config | grep BRANCH | sed 's/BRANCH=//')
+
+case $branch in
+  "main") echo "RPi config on branch $branch" ;;
+  "dev") echo "RPi config on branch $branch" ;;
+
+  *)  
+    echo "Invalid RPi config branch. Use the default main branch!"
+    # reset to default
+    sudo echo "$DEFAULT_CONFIG" > /etc/v2-config
+    branch="main"
+  ;;
+esac
+
+# update configs
 SECONDS=0
 CONFIGS_DIR="/tmp/v2rpi-configs-$branch"
 
@@ -45,6 +57,8 @@ fi
 rootPath="$CONFIGS_DIR/root/"
 rootPathLength=`echo $rootPath | wc -c`
 
+updated=0
+
 for srcFile in $(find $rootPath -print); do
   # only check files
   if [[ -f $srcFile ]]; then
@@ -54,6 +68,7 @@ for srcFile in $(find $rootPath -print); do
         *"etc/X11/xorg.conf"*) continue ;;
         *"home/pi/.v2cloud/V2-Cloud-VNC"*) continue ;;
         *"README.md"*) continue ;;
+        *"etc/v2-config"*) continue ;;
     esac
     # echo $srcFile
     targetFile=${srcFile:$((rootPathLength - 2))}
@@ -62,7 +77,7 @@ for srcFile in $(find $rootPath -print); do
     echo "compare between $srcFile $targetFile"
     cmp $srcFile $targetFile 2> /dev/null
     if [[ $? -eq 0 ]]
-    then echo "EQUAL"
+      then echo "EQUAL"
     else
       #diff  $srcFile $targetFile 
       if [[ "$targetFile" == *".sh" ]]; then
@@ -72,9 +87,13 @@ for srcFile in $(find $rootPath -print); do
         echo "    Create/Overwrite file $targetFile"
         sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetFile"
       fi
+      updated=$((updated+1))
     fi
     echo
   fi
 done;
 
 echo "update configs in $SECONDS seconds"
+NOW=$(date '+%Y-%m-%d %H:%M:%S')
+sudo sed -i "s/UPDATED=.*/UPDATED=$NOW/g" /etc/v2-config
+sudo sed -i "s/FILE_CHANGED=.*/FILE_CHANGED=$updated/g" /etc/v2-config
