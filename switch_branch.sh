@@ -33,6 +33,10 @@ if [ -f "/home/pi/$appName" ]; then
 fi
 
 zenity --info --title="Switching to $branch"  --text="Downloading $appName ..." --width=450 --timeout=5 &
+
+# remove download failed app
+sudo rm "/tmp/$appName" &> /dev/null
+
 # update newest V2 Client app
 cd /tmp \
   && curl -s "$downloadURL" \
@@ -42,8 +46,8 @@ cd /tmp \
   | wget -i - \
   && ls | grep '^V2-Cloud.*\.AppImage$' \
   | tr -d '\n'| sudo xargs -r0 chmod 777 \
-  && sudo rm /home/pi/V2-Cloud-* \
-  ; sudo mv /tmp/V2-Cloud-* /home/pi
+  && sudo rm /home/pi/V2-Cloud-*AppImage \
+  && sudo mv "/tmp/$appName" "/home/pi/$appName"
 
 if [ -f "/home/pi/$appName" ]; then 
     # get user's confirmation 
