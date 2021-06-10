@@ -69,6 +69,7 @@ for srcFile in $(find $rootPath -print); do
         *"home/pi/.v2cloud/V2-Cloud-VNC"*) continue ;;
         *"README.md"*) continue ;;
         *"etc/v2-config"*) continue ;;
+        *"etc/v2-release"*) continue ;;
     esac
     # echo $srcFile
     targetFile=${srcFile:$((rootPathLength - 2))}
