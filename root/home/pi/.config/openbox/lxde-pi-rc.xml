@@ -293,6 +293,11 @@
          <command>switch_branch.sh</command>
       </action>
     </keybind>
+    <keybind key="C-A-9">
+      <action name="Execute">
+         <command>sudo update_configs.sh</command>
+      </action>
+    </keybind>
     <!--keybindings for LXPanel -->
     <keybind key="Super_L">
       <action name="Execute">
