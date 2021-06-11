@@ -33,7 +33,7 @@ if [ -f "/home/pi/$appName" ]; then
 fi
 
 downloadingWindow="Switching to $branch"
-zenity --info --title="$downloadingWindow"  --text="Downloading $appName ..." --width=450
+zenity --info --title="$downloadingWindow"  --text="Downloading $appName ..." --width=450 &
 
 # remove download failed app
 sudo rm "/tmp/$appName" &> /dev/null
