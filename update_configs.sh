@@ -21,7 +21,7 @@ fi
 ### 
 
 # get rpi-config branch
-DEFAULT_CONFIG=$'BRANCH=main\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
+DEFAULT_CONFIG=$'BRANCH=main\nID=HASH-ID\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
 if [ ! -f "/etc/v2-config" ]; then 
   sudo echo "$DEFAULT_CONFIG" > /etc/v2-config
 fi
@@ -97,5 +97,7 @@ done;
 echo "update $updated configs in $SECONDS seconds"
 
 NOW=$(date '+%Y-%m-%d %H:%M:%S')
+hashId=`curl -s https://github.com/v2cloud/v2rpi-configs/commits/$branch | grep -m1 clipboard-copy | grep -oE 'value="[^"]*' | sed 's/value="//'`
+sudo sed -i "s/ID=.*/ID=$hashId/g" /etc/v2-config
 sudo sed -i "s/UPDATED=.*/UPDATED=$NOW/g" /etc/v2-config
 sudo sed -i "s/FILE_CHANGED=.*/FILE_CHANGED=$updated/g" /etc/v2-config

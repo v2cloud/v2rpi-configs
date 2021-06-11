@@ -10,10 +10,10 @@ branch=$(zenity --list --width=500 --height=200 \
 DEFAULT_CONFIG=""
 case $branch in
   "dev") 
-    DEFAULT_CONFIG=$'BRANCH=dev\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
+    DEFAULT_CONFIG=$'BRANCH=dev\nID=HASH-ID\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
   ;;
   "main") 
-    DEFAULT_CONFIG=$'BRANCH=main\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
+    DEFAULT_CONFIG=$'BRANCH=main\nID=HASH-ID\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
   ;;
 
   *)
