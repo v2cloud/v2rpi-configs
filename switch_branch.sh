@@ -32,7 +32,8 @@ if [ -f "/home/pi/$appName" ]; then
   exit 0;
 fi
 
-zenity --info --title="Switching to $branch"  --text="Downloading $appName ..." --width=450 --timeout=5 &
+downloadingWindow="Switching to $branch"
+zenity --info --title="$downloadingWindow"  --text="Downloading $appName ..." --width=450
 
 # remove download failed app
 sudo rm "/tmp/$appName" &> /dev/null
@@ -49,13 +50,15 @@ cd /tmp \
   && sudo rm /home/pi/V2-Cloud-*AppImage \
   && sudo mv "/tmp/$appName" "/home/pi/$appName"
 
+# notify result
+wmctrl -c "$downloadingWindow" 
 if [ -f "/home/pi/$appName" ]; then 
     # get user's confirmation 
     zenity --question --title="Switch to $branch complete" --text="Do you want to relaunch the app?" --width=300 --default-cancel
     if [ $? == 0 ]; then 
-        sudo systemctl restart lightdm.service
+      sudo systemctl restart lightdm.service
     fi
 else
-    zenity --error --title="Switch branch failed"  --text="Switch to $branch failed. Please retry!" --width=300 --timeout=3 &
+    zenity --error --title="Switch branch failed"  --text="Switch to $branch failed. Please retry!" --width=300
     exit 1
 fi
