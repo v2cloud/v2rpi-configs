@@ -85,8 +85,8 @@ for srcFile in $(find $rootPath -print); do
         echo "    Create/Overwrite bash file $targetFile"
         sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetFile" && sudo chmod 777 "$targetFile"
       else
-        echo "    Create/Overwrite file $targetFile"
-        sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetFile"
+        echo "    Create/Overwrite      file $targetFile"
+        sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetFile" && sudo chmod 666 "$targetFile"
       fi
       updated=$((updated+1))
     fi
@@ -94,7 +94,8 @@ for srcFile in $(find $rootPath -print); do
   fi
 done;
 
-echo "update configs in $SECONDS seconds"
+echo "update $updated configs in $SECONDS seconds"
+
 NOW=$(date '+%Y-%m-%d %H:%M:%S')
 sudo sed -i "s/UPDATED=.*/UPDATED=$NOW/g" /etc/v2-config
 sudo sed -i "s/FILE_CHANGED=.*/FILE_CHANGED=$updated/g" /etc/v2-config
