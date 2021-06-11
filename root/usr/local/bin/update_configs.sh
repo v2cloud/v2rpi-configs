@@ -35,6 +35,6 @@ if [[ "$DEFAULT_CONFIG" == "$currentConfig" ]]; then
 fi
 
 result=`sudo cat /etc/v2-config`
-changeList=`cat /tmp/update_logs | grep Create | sed 's/Create\/Overwrite //'`
+changeList=`cat /tmp/update_logs | grep Create | sed 's/    Create\/Overwrite/-/'`
 
-zenity --info --title="Update Complete"  --text="<b>You may need to restart to apply changes</b>\n$result\n$changeList" --width=500
+zenity --info --title="Update Complete"  --text="<b>You may need to restart to apply changes</b>\n<tt>$result\n$changeList</tt>" --width=500
