@@ -30,7 +30,7 @@ curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/$branch/update_c
 # Notify Result
 currentConfig=`cat /etc/v2-config`
 if [[ "$DEFAULT_CONFIG" == "$currentConfig" ]]; then
-	zenity --error --title="Update Failed"  --text="Please try again!" --width=300 --timeout=3 &
+	zenity --error --title="Update Failed"  --text="Please try again!" --width=300
 	exit 1;
 fi
 
