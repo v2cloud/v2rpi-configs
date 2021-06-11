@@ -21,7 +21,7 @@ fi
 ### 
 
 # get rpi-config branch
-DEFAULT_CONFIG=$'BRANCH=main\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
+DEFAULT_CONFIG=$'BRANCH=main\nID=HASH-ID\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
 if [ ! -f "/etc/v2-config" ]; then 
   sudo echo "$DEFAULT_CONFIG" > /etc/v2-config
 fi
@@ -85,8 +85,8 @@ for srcFile in $(find $rootPath -print); do
         echo "    Create/Overwrite bash file $targetFile"
         sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetFile" && sudo chmod 777 "$targetFile"
       else
-        echo "    Create/Overwrite file $targetFile"
-        sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetFile"
+        echo "    Create/Overwrite      file $targetFile"
+        sudo mkdir -p "$targetPath" && sudo bash -c "cat $srcFile > $targetFile" && sudo chmod 666 "$targetFile"
       fi
       updated=$((updated+1))
     fi
@@ -94,7 +94,10 @@ for srcFile in $(find $rootPath -print); do
   fi
 done;
 
-echo "update configs in $SECONDS seconds"
+echo "update $updated configs in $SECONDS seconds"
+
 NOW=$(date '+%Y-%m-%d %H:%M:%S')
+hashId=`curl -s https://github.com/v2cloud/v2rpi-configs/commits/$branch | grep -m1 clipboard-copy | grep -oE 'value="[^"]*' | sed 's/value="//'`
+sudo sed -i "s/ID=.*/ID=$hashId/g" /etc/v2-config
 sudo sed -i "s/UPDATED=.*/UPDATED=$NOW/g" /etc/v2-config
 sudo sed -i "s/FILE_CHANGED=.*/FILE_CHANGED=$updated/g" /etc/v2-config
