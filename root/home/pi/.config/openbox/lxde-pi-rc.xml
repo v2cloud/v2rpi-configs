@@ -295,7 +295,7 @@
     </keybind>
     <keybind key="C-A-9">
       <action name="Execute">
-         <command>sudo update_configs.sh</command>
+         <command>sh -c "sudo cat /usr/local/bin/update_configs.sh | sudo bash"</command>
       </action>
     </keybind>
     <!--keybindings for LXPanel -->
