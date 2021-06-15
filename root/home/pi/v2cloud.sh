@@ -81,3 +81,5 @@ esac
 # update configs
 echo "Updating configs in $branch branch"
 curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/$branch/update_configs.sh | sudo bash &> /tmp/update_logs
+
+# You are on test branch
