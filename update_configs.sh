@@ -5,7 +5,7 @@ installed() {
     return $(dpkg-query -W -f '${Status}\n' "${1}" 2>&1|awk '/ok installed/{print 0;exit}{print 1}')
 }
 
-pkgs=(libevent-pthreads-2.1-6 libjpeg8 sshpass feh wmctrl simple-scan printer-driver-all)
+pkgs=(libevent-pthreads-2.1-6 libjpeg8 sshpass feh wmctrl simple-scan printer-driver-all blueman)
 missing_pkgs=""
 
 for pkg in ${pkgs[@]}; do
