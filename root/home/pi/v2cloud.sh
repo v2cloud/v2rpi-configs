@@ -91,4 +91,7 @@ fi
 
 # update configs
 echo "Updating configs in $branch branch"
-curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/$branch/update_configs.sh | sudo bash &> /tmp/update_logs
+curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/$branch/update_configs.sh | sudo bash &> /tmp/update_configs_logs
+
+# check V2 VNC
+sudo check_v2vnc.sh &> /tmp/check_v2vnc_logs
