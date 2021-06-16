@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# This online script is called from
+#   /home/pi/v2cloud.sh (auto update)
+#   /usr/local/bin/update_configs.sh (manual update)
+
 # install required pkgs
 installed() {
     return $(dpkg-query -W -f '${Status}\n' "${1}" 2>&1|awk '/ok installed/{print 0;exit}{print 1}')
@@ -21,33 +25,33 @@ fi
 ### 
 
 # get rpi-config branch
-DEFAULT_CONFIG=$'BRANCH=main\nID=HASH-ID\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
-if [ ! -f "/etc/v2-config" ]; then 
-  sudo echo "$DEFAULT_CONFIG" > /etc/v2-config
-fi
-
 branch=$(sudo cat /etc/v2-config | grep BRANCH | sed 's/BRANCH=//')
 
-case $branch in
-  "main") echo "RPi config on branch $branch" ;;
-  "dev") echo "RPi config on branch $branch" ;;
+# validate branch
+valid=0;
+for b in $(curl -s https://api.github.com/repos/v2cloud/v2rpi-configs/branches | sed -ne 's/^.*name": "\([^"]*\).*$/\1/p' | tr '\n' ' '); do
+  if [[ "$branch" == "$b" ]]; then
+    valid=$((valid+1))
+    echo "Updating config in branch '$branch'"
+    break
+  fi
+done
 
-  *)  
-    echo "Invalid RPi config branch. Use the default main branch!"
-    # reset to default
-    sudo echo "$DEFAULT_CONFIG" > /etc/v2-config
-    branch="main"
-  ;;
-esac
+# invalid value then reset to default
+if [[ $valid -eq 0 ]]; then 
+  echo "Branch '$branch' is invalid! Updating config from the default 'main' branch"
+  branch="main"
+fi
 
-# update configs
 SECONDS=0
 CONFIGS_DIR="/tmp/v2rpi-configs-$branch"
 
+# download config files
 cd /tmp && \
 rm -rf "$CONFIGS_DIR" ; \
 wget -O - https://github.com/v2cloud/v2rpi-configs/archive/refs/heads/$branch.tar.gz | tar xz
 
+# exit if failed
 if [[ -d "$CONFIGS_DIR" ]]; then
   echo "$CONFIGS_DIR downloaded";
 else 
@@ -56,9 +60,9 @@ fi
 
 rootPath="$CONFIGS_DIR/root/"
 rootPathLength=`echo $rootPath | wc -c`
-
 updated=0
 
+# update config files
 for srcFile in $(find $rootPath -print); do
   # only check files
   if [[ -f $srcFile ]]; then
@@ -97,7 +101,15 @@ done;
 echo "update $updated configs in $SECONDS seconds"
 
 NOW=$(date '+%Y-%m-%d %H:%M:%S')
-hashId=`curl -s https://github.com/v2cloud/v2rpi-configs/commits/$branch | grep -m1 clipboard-copy | grep -oE 'value="[^"]*' | sed 's/value="//'`
+hashId=`curl -s https://api.github.com/repos/v2cloud/v2rpi-configs/commits/$branch | grep -m1 sha | sed -ne 's/^.*sha": "\([^"]*\).*$/\1/p'`
+
+# reset & update v2-config file
+# string with newline
+DEFAULT_CONFIG=$'\nID=HASH-ID\nUPDATED=YYYY-MM-DD hh:mm:ss\nFILE_CHANGED=0'
+# add branch
+DEFAULT_CONFIG="BRANCH=$branch$DEFAULT_CONFIG"
+sudo echo "$DEFAULT_CONFIG" > /etc/v2-config
+
 sudo sed -i "s/ID=.*/ID=$hashId/g" /etc/v2-config
 sudo sed -i "s/UPDATED=.*/UPDATED=$NOW/g" /etc/v2-config
 sudo sed -i "s/FILE_CHANGED=.*/FILE_CHANGED=$updated/g" /etc/v2-config
