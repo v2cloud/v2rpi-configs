@@ -73,10 +73,21 @@ check_internet.sh
 # get branch or set default to 'main'
 branch=$(sudo cat /etc/v2-config | grep BRANCH | sed 's/BRANCH=//')
 
-case $branch 
-  in "dev") ;;
-  *) branch="main" ;;
-esac
+# validate branch
+valid=0;
+for b in $(curl -s https://api.github.com/repos/v2cloud/v2rpi-configs/branches | sed -ne 's/^.*name": "\([^"]*\).*$/\1/p' | tr '\n' ' '); do
+  if [[ "$branch" == "$b" ]]; then
+    valid=$((valid+1))
+    echo "Updating config in branch '$branch'"
+    break
+  fi
+done
+
+# invalid value then reset to default
+if [[ $valid -eq 0 ]]; then 
+  echo "Branch '$branch' is invalid! Updating config from the default 'main' branch"
+  branch="main"
+fi
 
 # update configs
 echo "Updating configs in $branch branch"
