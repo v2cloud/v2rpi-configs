@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This online script is called from
-# 1. /home/pi/v2cloud.sh (auto update, main goal: silently update on the same branch)
+# 1. /user/local/bin/v2cloud.sh (auto update, main goal: silently update on the same branch)
 # 2. /usr/local/bin/update_configs.sh (manual update, main goal: interactively update to other branch)
 #     Example: change from 'main' to 'dev'
 #       1. The local file /usr/local/bin/update_configs.sh (on main branch) is executed
