@@ -118,3 +118,10 @@ sudo echo "$DEFAULT_CONFIG" > /etc/v2-config
 sudo sed -i "s/ID=.*/ID=$hashId/g" /etc/v2-config
 sudo sed -i "s/UPDATED=.*/UPDATED=$NOW/g" /etc/v2-config
 sudo sed -i "s/FILE_CHANGED=.*/FILE_CHANGED=$updated/g" /etc/v2-config
+
+if [[ $updated -ne 0 ]]; then
+  zenity --question --title="V2 AVA is updated" --text="<b>Please reboot to apply changes</b>" --width=400
+  if [ $? == 0 ]; then 
+    sudo reboot
+  fi
+fi
