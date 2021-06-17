@@ -51,7 +51,7 @@ unset IFS
 # SETUP WIFI - end ---
 
 # set background image
-feh --bg-fill '/home/pi/background.png'
+feh --bg-fill '/home/pi/.v2cloud/background.png'
 
 # current V2 Cloud app
 appName=$(ls /home/pi/ | grep '^V2-Cloud.*\.AppImage$')
