@@ -23,7 +23,7 @@ sudo cp '/home/pi/.v2cloud/files/config.txt' '/boot/config.txt'
 sudo cp '/home/pi/.v2cloud/files/xorg.conf' '/etc/X11/xorg.conf'
 
 # delete files
-sudo rm '/etc/X11/xorg.conf.disable'
+sudo rm '/etc/X11/xorg.conf.disable' /home/pi/.v2cloud/V2-Cloud-VNC*AppImage
 
 # clear history
 sudo cat /dev/null > /home/pi/.bash_history
