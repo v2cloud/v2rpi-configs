@@ -31,7 +31,7 @@ DEFAULT_CONFIG="BRANCH=$branch$DEFAULT_CONFIG"
 sudo echo "$DEFAULT_CONFIG" > /etc/v2-config
 
 NOW=$(date '+%Y-%m-%d %H:%M:%S')
-echo "$NOW Execute update_configs.sh in '$branch' branch of v2rpi-configs repo" >> /tmp/update_configs_logs
+echo "$NOW Execute update_configs.sh in '$branch' branch of v2rpi-configs repo" >> /tmp/update_logs
 curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/$branch/update_configs.sh | sudo bash &> /tmp/update_logs
 
 # Notify Result

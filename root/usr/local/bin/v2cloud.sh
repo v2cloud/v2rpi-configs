@@ -1,5 +1,7 @@
 #!/bin/bash
 
+xscreensaver -no-splash &
+
 # Enable/Disable xorg.conf file for dual screen - start
 XORG_CONFIG_FILE='/etc/X11/xorg.conf'
 XORG_CONFIG_FILE_DISABLE='/etc/X11/xorg.conf.disable'
@@ -45,10 +47,11 @@ for con in $(nmcli -t -f NAME,TYPE connection | grep 802-11-wireless | tr '\n' '
      echo "${con} has the same MAC address ${mac_address}"
    fi
 done
+unset IFS
 # SETUP WIFI - end ---
 
 # set background image
-feh --bg-fill '/home/pi/background.png'
+feh --bg-fill '/home/pi/.v2cloud/background.png'
 
 # current V2 Cloud app
 appName=$(ls /home/pi/ | grep '^V2-Cloud.*\.AppImage$')
@@ -91,6 +94,9 @@ fi
 
 # update configs
 echo "Updating configs in $branch branch"
-curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/$branch/update_configs.sh | sudo bash &> /tmp/update_logs
+curl -s https://raw.githubusercontent.com/v2cloud/v2rpi-configs/$branch/update_configs.sh | sudo bash &> /tmp/update_configs_logs
+
+# check V2 VNC
+sudo check_v2vnc.sh &> /tmp/check_v2vnc_logs
 
 # You are on test branch
