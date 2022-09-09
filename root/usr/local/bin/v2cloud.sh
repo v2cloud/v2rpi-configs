@@ -54,10 +54,10 @@ unset IFS
 feh --bg-fill '/home/pi/.v2cloud/background.png'
 
 # current V2 Cloud app
-appName=$(ls /home/pi/ | grep '^V2-Cloud.*\.AppImage$')
+appName=$(ls /home/pi/ | grep -m1 -e '^V2-Cloud.*\.AppImage$' -e '^Remote-Desktop.*\.AppImage$')
 
 # check new version was downloaded
-newAppName=$(ls /home/pi/.cache/v2client-electron-updater/pending/ | grep '^V2-Cloud.*\.AppImage$')
+newAppName=$(ls /home/pi/.cache/v2client-electron-updater/pending/ | grep -m1 -e '^V2-Cloud.*\.AppImage$' -e '^Remote-Desktop.*\.AppImage$')
 
 if [[ -z "$newAppName" ]]; then
   cd /home/pi && ./$appName --no-security &
